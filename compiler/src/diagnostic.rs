@@ -1,4 +1,4 @@
-use std::{collections::HashMap, ops::Range};
+use std::{collections::HashMap, ops::Range, convert::Infallible};
 
 use ariadne::{Config, FnCache, Label, Report, ReportKind};
 use typst::{
@@ -37,7 +37,7 @@ pub fn format_diagnostic(
 ) -> String {
     let mut bytes = Vec::new();
 
-    let mut cache = FnCache::new(|id: &Id| {
+    let mut cache = FnCache::new(|id: &Id| -> Result<String, Infallible> {
         Ok(if let Some(id) = id.0 {
             sources.get(&id).unwrap().source().text().to_string()
         } else {
